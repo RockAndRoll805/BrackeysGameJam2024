@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckdl8jj3c4kjl"]
+
+[ext_resource type="Script" path="res://Scripts/LevelLoader.cs" id="1_bhcwe"]
+
+[node name="LevelLoader" type="Node2D"]
+script = ExtResource("1_bhcwe")
+
+[node name="Camera2D" type="Camera2D" parent="."]
