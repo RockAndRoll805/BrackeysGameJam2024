@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=4 uid="uid://dgq8yw1t5bkv4"]
 
-[ext_resource type="PackedScene" uid="uid://b7w414cbauav" path="res://test.tscn" id="1_s5n33"]
+[ext_resource type="PackedScene" uid="uid://b7w414cbauav" path="res://Scenes/Units/LineShooter.tscn" id="1_s5n33"]
 [ext_resource type="Script" path="res://Scripts/Grid.cs" id="1_y86lv"]
 [ext_resource type="Texture2D" uid="uid://b50nnghwgwpox" path="res://Sprites/tile.png" id="2_371re"]
 
@@ -23,21 +23,8 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAA
 tile_set = SubResource("TileSet_i6ihd")
 
 [node name="Test" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(-33, 33)
+position = Vector2(-35, 90)
 
 [node name="Test2" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(35, 35)
+position = Vector2(32, -30)
 FacingDirection = 1
-
-[node name="Test3" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(101, -33)
-FacingDirection = 2
-
-[node name="Test4" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(-34, -32)
-
-[node name="Test5" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(34, -33)
-
-[node name="Test6" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(33, 101)
