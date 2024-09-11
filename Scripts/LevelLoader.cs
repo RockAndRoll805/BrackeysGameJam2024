@@ -23,8 +23,8 @@ public partial class LevelLoader : Node
 	{
 		foreach(Node child in GetChildren())
 		{
-			if (child is Unit)
-				((Unit)child).Attack();
+			if (child is Unit unit)
+				unit.Attack();
 		}
 	}
 
@@ -95,8 +95,7 @@ public partial class LevelLoader : Node
 				float gridX = ((newX - 32) / 64) + gridSizeX / 2;
 				float gridY = ((newY - 32) / 64) + gridSizeY / 2;
 				unitGrid[(int)gridX, (int)gridY] = childUnit;
-				((Unit)childUnit).coordinateX = (int)gridX;
-				((Unit)childUnit).coordinateY = (int)gridY;
+				((Unit)childUnit).Coordinates = ((int)gridX, (int)gridY);
 			}
 		}
 	}
