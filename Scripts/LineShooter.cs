@@ -8,44 +8,44 @@ public partial class LineShooter : Unit
     public override int[,] GetAttackRange()
     {
         LevelLoader level = (LevelLoader)GetNode("/root/LevelLoader");
-		int[,] selection = new int[level.gridSizeX, level.gridSizeY];
+		int[,] selection = new int[level.gridSize.X, level.gridSize.Y];
 		
 		// I am lazy so just going to do switch here
 		switch (FacingDirection)
 		{
 			case 0: // north
-				for(int iter = coordinateY - 1; iter >= 0; iter--)
+				for(int iter = coordinates.Y - 1; iter >= 0; iter--)
 				{
-					selection[coordinateX, iter] = 1;
-					if (level.unitGrid[coordinateX, iter] != null
-					&& level.unitGrid[coordinateX, iter] is Unit)
+					selection[coordinates.X, iter] = 1;
+					if (level.unitGrid[coordinates.X, iter] != null
+					&& level.unitGrid[coordinates.X, iter] is Unit)
 						break;
 				}
 				break;
 			case 1: // east
-				for(int iter = coordinateX + 1; iter < level.gridSizeX; iter++)
+				for(int iter = coordinates.X + 1; iter < level.gridSize.X; iter++)
 				{
-					selection[iter, coordinateY] = 1;
-					if (level.unitGrid[iter, coordinateY] != null
-					&& level.unitGrid[iter, coordinateY] is Unit)
+					selection[iter, coordinates.Y] = 1;
+					if (level.unitGrid[iter, coordinates.Y] != null
+					&& level.unitGrid[iter, coordinates.Y] is Unit)
 						break;
 				}
 				break;
 			case 2: // south
-				for(int iter = coordinateY + 1; iter < level.gridSizeY; iter++)
+				for(int iter = coordinates.Y + 1; iter < level.gridSize.Y; iter++)
 				{
-					selection[coordinateX, iter] = 1;
-					if (level.unitGrid[coordinateX, iter] != null
-					&& level.unitGrid[coordinateX, iter] is Unit)
+					selection[coordinates.X, iter] = 1;
+					if (level.unitGrid[coordinates.X, iter] != null
+					&& level.unitGrid[coordinates.X, iter] is Unit)
 						break;
 				}
 				break;
 			case 3: // west
-				for(int iter = coordinateX - 1; iter > 0; iter--)
+				for(int iter = coordinates.X - 1; iter > 0; iter--)
 				{
-					selection[iter, coordinateY] = 1;
-					if (level.unitGrid[iter, coordinateY] != null
-					&& level.unitGrid[iter, coordinateY] is Unit)
+					selection[iter, coordinates.Y] = 1;
+					if (level.unitGrid[iter, coordinates.Y] != null
+					&& level.unitGrid[iter, coordinates.Y] is Unit)
 						break;
 				}
 				break;

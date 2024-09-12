@@ -8,8 +8,9 @@ public partial class LevelLoader : Node
 	private int currentLevelCount = 0;
 	public Node[,] unitGrid;
 	private Node[,] terrainGrid;
-	public int gridSizeX = 0;
-	public int gridSizeY = 0;
+	// public int gridSizeX = 0;
+	// public int gridSizeY = 0;
+	public (int X, int Y) gridSize = (0, 0);
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -63,10 +64,10 @@ public partial class LevelLoader : Node
 
 	public void HighlightGrid(int[,] selection)
 	{
-		for (int y = 0; y < gridSizeX; y++)
+		for (int y = 0; y < gridSize.X; y++)
 		{
 			string printer = "";
-			for (int x = 0; x < gridSizeY; x++)
+			for (int x = 0; x < gridSize.Y; x++)
 				printer += selection[x, y] + " ";
 			GD.Print(printer);
 		}
@@ -75,7 +76,7 @@ public partial class LevelLoader : Node
 	
 	private void AlignGridAndPopulate()
 	{
-		unitGrid = new Node[gridSizeX, gridSizeY];
+		unitGrid = new Node[gridSize.X, gridSize.Y];
 		Node currentLevel = GetNode("Level" + currentLevelCount);
 		foreach(Node child in currentLevel.GetChildren())
 		{
@@ -88,12 +89,12 @@ public partial class LevelLoader : Node
 				float newX = Mathf.Ceil(x / 64) * 64 - 32;
 				float newY = Mathf.Ceil(y / 64) * 64 - 32;
 				childUnit.Position = new Vector2(newX, newY);
-
+				
 				// Populate Grid
 				// take X Y coordinates and turn it into position in 2d list
 				// the grid in the editor is aligned with the center at 0,0 so add half grid size to not go negative
-				float gridX = ((newX - 32) / 64) + gridSizeX / 2;
-				float gridY = ((newY - 32) / 64) + gridSizeY / 2;
+				float gridX = ((newX - 32) / 64) + gridSize.X / 2;
+				float gridY = ((newY - 32) / 64) + gridSize.Y / 2;
 				unitGrid[(int)gridX, (int)gridY] = childUnit;
 				((Unit)childUnit).Coordinates = ((int)gridX, (int)gridY);
 			}
