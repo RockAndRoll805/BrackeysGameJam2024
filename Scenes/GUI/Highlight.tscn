@@ -1,23 +1,24 @@
 [gd_scene load_steps=3 format=3 uid="uid://d032uys1lv5al"]
 
 [ext_resource type="Script" path="res://Scripts/Highlight.cs" id="1_e22py"]
-[ext_resource type="Texture2D" uid="uid://chmyu0wylgxjc" path="res://Sprites/highlight circle.png" id="3_fhu8a"]
+[ext_resource type="Texture2D" uid="uid://byabvnnamion2" path="res://Sprites/UI/highlight circle.png" id="2_2uda6"]
 
 [node name="Highlight" type="Node2D"]
 script = ExtResource("1_e22py")
+circleSprite = ExtResource("2_2uda6")
 
 [node name="BottomRight" type="Sprite2D" parent="."]
 position = Vector2(28, 28)
-texture = ExtResource("3_fhu8a")
+texture = ExtResource("2_2uda6")
 
 [node name="TopRight" type="Sprite2D" parent="."]
 position = Vector2(28, -28)
-texture = ExtResource("3_fhu8a")
+texture = ExtResource("2_2uda6")
 
 [node name="TopLeft" type="Sprite2D" parent="."]
 position = Vector2(-28, -28)
-texture = ExtResource("3_fhu8a")
+texture = ExtResource("2_2uda6")
 
 [node name="BottomLeft" type="Sprite2D" parent="."]
 position = Vector2(-28, 28)
-texture = ExtResource("3_fhu8a")
+texture = ExtResource("2_2uda6")

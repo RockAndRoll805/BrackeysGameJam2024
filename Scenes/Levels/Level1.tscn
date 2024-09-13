@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://dgq8yw1t5bkv4"]
+[gd_scene load_steps=7 format=4 uid="uid://dgq8yw1t5bkv4"]
 
 [ext_resource type="PackedScene" uid="uid://b7w414cbauav" path="res://Scenes/Units/LineShooter.tscn" id="1_s5n33"]
 [ext_resource type="Script" path="res://Scripts/Grid.cs" id="1_y86lv"]
-[ext_resource type="Texture2D" uid="uid://b7l55bim14erx" path="res://Sprites/tile.png" id="2_371re"]
+[ext_resource type="Texture2D" uid="uid://d0jt87m2mxsco" path="res://Sprites/tile.png" id="2_371re"]
+[ext_resource type="PackedScene" uid="uid://d032uys1lv5al" path="res://Scenes/GUI/Highlight.tscn" id="4_yxagt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ap34g"]
 texture = ExtResource("2_371re")
@@ -27,3 +28,6 @@ position = Vector2(-35, 90)
 
 [node name="Test2" parent="." instance=ExtResource("1_s5n33")]
 position = Vector2(32, -30)
+
+[node name="Highlight" parent="." instance=ExtResource("4_yxagt")]
+position = Vector2(85, 30)

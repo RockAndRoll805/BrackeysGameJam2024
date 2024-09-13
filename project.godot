@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/LevelLoader.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+UnitController="*res://Scripts/Autoloads/UnitController.cs"
+
 [dotnet]
 
 project/assembly_name="TurboITB"

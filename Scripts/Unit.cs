@@ -17,9 +17,12 @@ public partial class Unit : Node2D
 	protected int max_range = 5; // the maximum range of the unit
 
 	// gameplay assets
-	[Export] 
-	protected Texture2D range_circle_sprite;
-	protected Sprite2D range_circle;
+
+
+	// range circle is deprecated/proof of concept
+	// [Export] 
+	// protected Texture2D range_circle_sprite;
+	// protected Sprite2D range_circle;
 
 	// GETTERS and SETTERS
 	public (int X, int Y) Coordinates { get => coordinates; set => coordinates = value; }
@@ -34,16 +37,34 @@ public partial class Unit : Node2D
 		GetNode<Button>("Button").Pressed += SelectUnit;
        
 	   	// Initialize Range Indicator
-	    range_circle = new()
-        {
-            Texture = range_circle_sprite,
-            Modulate = new(1.0f, 1.0f, 1.0f, 0.5f),
-            GlobalPosition = this.GlobalPosition,
-            Scale = new(max_range, max_range),
-			Visible = false,
-        };
-		this.AddChild(range_circle);
+	    // range_circle = new()
+        // {
+        //     Texture = range_circle_sprite,
+        //     Modulate = new(1.0f, 1.0f, 1.0f, 0.5f),
+        //     GlobalPosition = this.GlobalPosition,
+        //     Scale = new(max_range, max_range),
+		// 	Visible = false,
+        // };
+		// this.AddChild(range_circle);
     }
+
+    public override void _Process(double delta)
+    {
+
+		if(is_selected) {
+			// do whatever if unit is selected
+
+			// check to see if unit is still selected and update accordingly
+			if(UnitController.SelectedUnit.GetInstanceId != this.GetInstanceId) { 
+				
+				is_selected = false; 
+				// SetRangeCircle(set_visible:false);
+			}
+		}
+
+    }
+
+    
 
 	public virtual int[,] GetAttackRange()
 	{
@@ -56,14 +77,24 @@ public partial class Unit : Node2D
 		
 	}
 
+	// // update range_circle (function for ease of use)
+	// private void SetRangeCircle(bool set_visible=false, Texture2D sprite=null) {
+		
+	// 	if(sprite != null) { range_circle.Texture = sprite; }
+
+	// 	range_circle.Visible = set_visible;
+	// 	range_circle.GlobalPosition = this.GlobalPosition;
+
+	// }
+
 	public void SelectUnit()
 	{
 		// GD.Print("clicked");
+		UnitController.SelectedUnit = this;
 		is_selected = true;
 
-        // display range circle
-        range_circle.Visible = true;
-
+		// display range circle
+		// SetRangeCircle(set_visible:true);
 
         ((LevelLoader)GetNode("/root/LevelLoader")).HighlightGrid(GetAttackRange());
 	}

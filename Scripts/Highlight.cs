@@ -2,8 +2,11 @@ using Godot;
 using System;
 using System.Diagnostics.Metrics;
 
-public partial class Highlight : Node
+namespace TurboITB;
+public partial class Highlight : Node2D
 {
+
+	[Export] public CompressedTexture2D circleSprite;
 	Sprite2D topLeft;
 	Sprite2D topRight;
 	Sprite2D bottomLeft;
@@ -20,11 +23,26 @@ public partial class Highlight : Node
 		topRight = (Sprite2D)GetNode("TopRight");
 		bottomLeft = (Sprite2D)GetNode("BottomLeft");
 		bottomRight = (Sprite2D)GetNode("BottomRight");
+
+		topLeft.Texture = circleSprite;
+		topRight.Texture = circleSprite;
+		bottomLeft.Texture = circleSprite;
+		bottomRight.Texture = circleSprite;
+		
+		this.Visible = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+
+		// update position
+		if( UnitController.SelectedUnit != null ) {
+			this.Visible = true;
+			this.GlobalPosition = UnitController.SelectedUnit.GlobalPosition;
+		}
+		else { this.Visible = false; }
+
 		elapsedTime += delta;
 		
 		if (elapsedTime >= timer)
