@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+namespace TurboITB;
+
 public partial class LevelLoader : Node
 {
 	private int currentLevelCount = 0;

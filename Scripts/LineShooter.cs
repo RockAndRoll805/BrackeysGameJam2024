@@ -1,10 +1,13 @@
 using Godot;
 using System;
 
+namespace TurboITB;
+
 public partial class LineShooter : Unit
 {
 	// line shooter shoots in a line that it is facing
 	// it's attack stops on the first unit hit
+
     public override int[,] GetAttackRange()
     {
         LevelLoader level = (LevelLoader)GetNode("/root/LevelLoader");
