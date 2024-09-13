@@ -17,4 +17,4 @@ config/icon="res://icon.svg"
 
 [dotnet]
 
-project/assembly_name="TuroITB"
+project/assembly_name="TurboITB"
