@@ -8,10 +8,9 @@ public partial class LineShooter : Unit
 	// line shooter shoots in a line that it is facing
 	// it's attack stops on the first unit hit
 
-    public override int[,] GetAttackRange()
-    {
-        LevelLoader level = (LevelLoader)GetNode("/root/LevelLoader");
-		int[,] selection = new int[level.gridSize.X, level.gridSize.Y];
+	public override int[,] GetAttackRange()
+	{
+		int[,] selection = new int[GridController.GridSize.X, GridController.GridSize.Y];
 		
 		// I am lazy so just going to do switch here
 		switch (FacingDirection)
@@ -20,26 +19,26 @@ public partial class LineShooter : Unit
 				for(int iter = coordinates.Y - 1; iter >= 0; iter--)
 				{
 					selection[coordinates.X, iter] = 1;
-					if (level.unitGrid[coordinates.X, iter] != null
-					&& level.unitGrid[coordinates.X, iter] is Unit)
+					if (GridController.UnitGrid[coordinates.X, iter] != null
+					&& GridController.UnitGrid[coordinates.X, iter] is Unit)
 						break;
 				}
 				break;
 			case 1: // east
-				for(int iter = coordinates.X + 1; iter < level.gridSize.X; iter++)
+				for(int iter = coordinates.X + 1; iter < GridController.GridSize.X; iter++)
 				{
 					selection[iter, coordinates.Y] = 1;
-					if (level.unitGrid[iter, coordinates.Y] != null
-					&& level.unitGrid[iter, coordinates.Y] is Unit)
+					if (GridController.UnitGrid[iter, coordinates.Y] != null
+					&& GridController.UnitGrid[iter, coordinates.Y] is Unit)
 						break;
 				}
 				break;
 			case 2: // south
-				for(int iter = coordinates.Y + 1; iter < level.gridSize.Y; iter++)
+				for(int iter = coordinates.Y + 1; iter < GridController.GridSize.Y; iter++)
 				{
 					selection[coordinates.X, iter] = 1;
-					if (level.unitGrid[coordinates.X, iter] != null
-					&& level.unitGrid[coordinates.X, iter] is Unit)
+					if (GridController.UnitGrid[coordinates.X, iter] != null
+					&& GridController.UnitGrid[coordinates.X, iter] is Unit)
 						break;
 				}
 				break;
@@ -47,17 +46,17 @@ public partial class LineShooter : Unit
 				for(int iter = coordinates.X - 1; iter > 0; iter--)
 				{
 					selection[iter, coordinates.Y] = 1;
-					if (level.unitGrid[iter, coordinates.Y] != null
-					&& level.unitGrid[iter, coordinates.Y] is Unit)
+					if (GridController.UnitGrid[iter, coordinates.Y] != null
+					&& GridController.UnitGrid[iter, coordinates.Y] is Unit)
 						break;
 				}
 				break;
 		}
 
 		return selection;
-    }
+	}
 
-    public override void Attack()
+	public override void Attack()
 	{
 
 	}

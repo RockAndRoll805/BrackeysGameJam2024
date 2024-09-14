@@ -10,8 +10,6 @@ public partial class LevelLoader : Node
 	private int currentLevelCount = 0;
 	public Node[,] unitGrid;
 	private Node[,] terrainGrid;
-	// public int gridSizeX = 0;
-	// public int gridSizeY = 0;
 	public (int X, int Y) gridSize = (0, 0);
 
 	// Called when the node enters the scene tree for the first time.
@@ -34,7 +32,7 @@ public partial class LevelLoader : Node
 	// currently this is support for 4k displays
 	private void ResizeWindow()
 	{
-		Camera2D camera = (Camera2D)GetNode("Camera2D");
+		Camera2D camera = GetNode<Camera2D>("Camera2D");
 		Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
 		if (viewportSize.X > 1920 && viewportSize.Y > 1080)
 			camera.Zoom = new Vector2(viewportSize.X / 1920, viewportSize.Y / 1080);
@@ -56,6 +54,7 @@ public partial class LevelLoader : Node
 			PackedScene nextLevel = GD.Load<PackedScene>(levelScene);
 			Node nextLevelNode = nextLevel.Instantiate();
 			AddChild(nextLevelNode);
+			GridController.CurrentLevel = (Grid)nextLevelNode;
 			AlignGridAndPopulate();
 		}
 		else
@@ -64,21 +63,10 @@ public partial class LevelLoader : Node
 		}
 	}
 
-	public void HighlightGrid(int[,] selection)
-	{
-		for (int y = 0; y < gridSize.X; y++)
-		{
-			string printer = "";
-			for (int x = 0; x < gridSize.Y; x++)
-				printer += selection[x, y] + " ";
-			GD.Print(printer);
-		}
-	}
-
 	
 	private void AlignGridAndPopulate()
 	{
-		unitGrid = new Node[gridSize.X, gridSize.Y];
+		GridController.UnitGrid = new Node[GridController.GridSize.X, GridController.GridSize.Y];
 		Node currentLevel = GetNode("Level" + currentLevelCount);
 		foreach(Node child in currentLevel.GetChildren())
 		{
@@ -95,9 +83,9 @@ public partial class LevelLoader : Node
 				// Populate Grid
 				// take X Y coordinates and turn it into position in 2d list
 				// the grid in the editor is aligned with the center at 0,0 so add half grid size to not go negative
-				float gridX = ((newX - 32) / 64) + gridSize.X / 2;
-				float gridY = ((newY - 32) / 64) + gridSize.Y / 2;
-				unitGrid[(int)gridX, (int)gridY] = childUnit;
+				float gridX = ((newX - 32) / 64) + GridController.GridSize.X / 2;
+				float gridY = ((newY - 32) / 64) + GridController.GridSize.Y / 2;
+				GridController.UnitGrid[(int)gridX, (int)gridY] = childUnit;
 				((Unit)childUnit).Coordinates = ((int)gridX, (int)gridY);
 			}
 		}

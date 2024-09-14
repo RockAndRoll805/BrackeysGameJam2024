@@ -19,11 +19,6 @@ public partial class Unit : Node2D
 	// gameplay assets
 
 
-	// range circle is deprecated/proof of concept
-	// [Export] 
-	// protected Texture2D range_circle_sprite;
-	// protected Sprite2D range_circle;
-
 	// GETTERS and SETTERS
 	public (int X, int Y) Coordinates { get => coordinates; set => coordinates = value; }
 	public int FacingDirection { get => facing_direction; set => facing_direction = value; } // 0 North, 1 East, 2 South, 3 West
@@ -35,36 +30,26 @@ public partial class Unit : Node2D
 		
 		// Add signals to class
 		GetNode<Button>("Button").Pressed += SelectUnit;
-       
-	   	// Initialize Range Indicator
-	    // range_circle = new()
-        // {
-        //     Texture = range_circle_sprite,
-        //     Modulate = new(1.0f, 1.0f, 1.0f, 0.5f),
-        //     GlobalPosition = this.GlobalPosition,
-        //     Scale = new(max_range, max_range),
-		// 	Visible = false,
-        // };
-		// this.AddChild(range_circle);
-    }
+	}
 
-    public override void _Process(double delta)
-    {
+	public override void _Process(double delta)
+	{
+		// if(is_selected) {
+		// 	// do whatever if unit is selected
 
-		if(is_selected) {
-			// do whatever if unit is selected
+		// 	// check to see if unit is still selected and update accordingly
+		// 	if(GridController.SelectedUnit.GetInstanceId != this.GetInstanceId)
+		// 	{
+		// 		is_selected = false; 
+		// 	}
+		// }
 
-			// check to see if unit is still selected and update accordingly
-			if(UnitController.SelectedUnit.GetInstanceId != this.GetInstanceId) { 
-				
-				is_selected = false; 
-				// SetRangeCircle(set_visible:false);
-			}
-		}
+	}
 
-    }
-
-    
+	public void HighlightAttack()
+	{
+		GD.Print(GridController.GridSize.X);
+	}
 
 	public virtual int[,] GetAttackRange()
 	{
@@ -77,25 +62,22 @@ public partial class Unit : Node2D
 		
 	}
 
-	// // update range_circle (function for ease of use)
-	// private void SetRangeCircle(bool set_visible=false, Texture2D sprite=null) {
-		
-	// 	if(sprite != null) { range_circle.Texture = sprite; }
-
-	// 	range_circle.Visible = set_visible;
-	// 	range_circle.GlobalPosition = this.GlobalPosition;
-
-	// }
-
 	public void SelectUnit()
 	{
-		// GD.Print("clicked");
-		UnitController.SelectedUnit = this;
-		is_selected = true;
-
-		// display range circle
-		// SetRangeCircle(set_visible:true);
-
-        ((LevelLoader)GetNode("/root/LevelLoader")).HighlightGrid(GetAttackRange());
+		//GridController.SelectedUnit = GridController.SelectedUnit == this ? null : this;
+		if (GridController.SelectedUnit == this)
+		{
+			this.Modulate = new Color(1f,1f,1f, 1f);
+			GridController.SelectedUnit = null;
+		}
+		else
+		{
+			if (GridController.SelectedUnit != null)
+				GridController.SelectedUnit.Modulate = new Color(1f,1f,1f, 1f);
+			this.Modulate = new Color(1f,1f,1f, 0.8f);
+			GridController.SelectedUnit = this;
+		}
+		// GridController.HighlightGrid(GetAttackRange());
+		// is_selected = true;
 	}
 }
