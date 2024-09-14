@@ -22,3 +22,7 @@ GridController="*res://Scripts/Autoloads/GridController.cs"
 [dotnet]
 
 project/assembly_name="TurboITB"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

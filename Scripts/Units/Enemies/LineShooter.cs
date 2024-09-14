@@ -21,7 +21,10 @@ public partial class LineShooter : Unit
 					selection[coordinates.X, iter] = 1;
 					if (GridController.UnitGrid[coordinates.X, iter] != null
 					&& GridController.UnitGrid[coordinates.X, iter] is Unit)
+					{
+						selection[coordinates.X, iter] = 2;
 						break;
+					}
 				}
 				break;
 			case 1: // east
@@ -30,7 +33,10 @@ public partial class LineShooter : Unit
 					selection[iter, coordinates.Y] = 1;
 					if (GridController.UnitGrid[iter, coordinates.Y] != null
 					&& GridController.UnitGrid[iter, coordinates.Y] is Unit)
+					{
+						selection[iter, coordinates.Y] = 2;
 						break;
+					}
 				}
 				break;
 			case 2: // south
@@ -39,7 +45,10 @@ public partial class LineShooter : Unit
 					selection[coordinates.X, iter] = 1;
 					if (GridController.UnitGrid[coordinates.X, iter] != null
 					&& GridController.UnitGrid[coordinates.X, iter] is Unit)
+					{
+						selection[coordinates.X, iter] = 2;
 						break;
+					}
 				}
 				break;
 			case 3: // west
@@ -48,7 +57,10 @@ public partial class LineShooter : Unit
 					selection[iter, coordinates.Y] = 1;
 					if (GridController.UnitGrid[iter, coordinates.Y] != null
 					&& GridController.UnitGrid[iter, coordinates.Y] is Unit)
+					{
+						selection[coordinates.X, iter] = 2;
 						break;
+					}
 				}
 				break;
 		}

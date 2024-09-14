@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://22q72dkg1vr0"]
 
-[ext_resource type="Script" path="res://Scripts/UnitSelectHighlight.cs" id="1_e22py"]
+[ext_resource type="Script" path="res://Scripts/GUI/UnitSelectHighlight.cs" id="1_e22py"]
 [ext_resource type="Texture2D" uid="uid://tl6lgk8kiu50" path="res://Sprites/UI/highlight circle.png" id="2_2uda6"]
 
 [node name="UnitSelectHighlight" type="Node2D"]
