@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 namespace TurboITB;
 
@@ -26,7 +27,7 @@ public partial class Unit : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.Rotate(Mathf.DegToRad(90 * (int)facing_direction));
+		GetNode<Sprite2D>("Sprite2D").Rotate(Mathf.DegToRad(90 * (int)facing_direction));
 		
 		// Add signals to class
 		GetNode<Button>("Button").Pressed += SelectUnit;
@@ -64,10 +65,52 @@ public partial class Unit : Node2D
 		GD.Print("this is not override");
 		return null;
 	}
-	
-	public virtual void Attack()
+
+	// HACK HACKHACK!!! It's midnight!!
+	public virtual async void Attack()
 	{
-		
+		int[,] attackArr = GetAttackRange();
+		(int x, int y) pos = (-1,-1);
+
+		for (int y = 0; y < GridController.GridSize.Y; y++)
+			for (int x = 0; x < GridController.GridSize.X; x++)
+				if(attackArr[x, y] == 2)
+					pos = (x, y);
+		GD.Print(pos);
+		if (pos == (-1,-1))
+		{
+			switch(FacingDirection)
+			{
+				case(0): // north
+					pos = (coordinates.X, 0);
+					break;
+				case(1): // east
+					pos = (GridController.GridSize.Y - 1, coordinates.Y);
+					break;
+				case(2): // south
+					pos = (coordinates.X, GridController.GridSize.X - 1);
+					break;
+				case(3): // west
+					pos = (0, coordinates.Y);
+					break;
+			}
+		}
+		else
+		{
+			GridController.UnitGrid[pos.x, pos.y].Free();
+			GridController.UnitGrid[pos.x, pos.y] = null;
+		}
+
+		int diffX = pos.x - coordinates.X;
+		int diifY = pos.y - coordinates.Y;
+		Sprite2D sprite = new Sprite2D();
+		sprite.Name = "Bullet";
+		sprite.Texture = GD.Load<Texture2D>("res://Sprites/UI/highlight circle.png");
+		this.AddChild(sprite);
+		Tween tween = sprite.CreateTween();
+		tween.TweenProperty(sprite, "position", new Vector2(diffX * 64, diifY * 64), 0.5f);
+		tween.TweenCallback(Callable.From(sprite.QueueFree));
+
 	}
 
 	public void SelectUnit()
@@ -84,6 +127,7 @@ public partial class Unit : Node2D
 			Sprite2D ghost = new Sprite2D();
 			ghost.Scale = this.GetNode<Sprite2D>("Sprite2D").Scale;
 			ghost.Texture = this.GetNode<Sprite2D>("Sprite2D").Texture;
+			ghost.Rotation = this.GetNode<Sprite2D>("Sprite2D").Rotation;
 			ghost.Position = this.Position;
 			ghost.Name = "Sprite2D";
 			GridController.CurrentLevel.AddChild(ghost);
