@@ -14,11 +14,11 @@ public partial class Unit : Node2D
 	// gameplay variables
 	[Export]
 	protected int min_range = 0; // the minimum range of the unit
-	[Export] 
+	[Export]
 	protected int max_range = 5; // the maximum range of the unit
 
 	// gameplay assets
-
+	
 
 	// GETTERS and SETTERS
 	public (int X, int Y) Coordinates { get => coordinates; set => coordinates = value; }
