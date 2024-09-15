@@ -33,6 +33,8 @@ public partial class LevelLoader : Node
 			}
 				
 		}
+
+		GridController.CurrentLevel.HighlightAttacks();
 	}
 
 	public void ResetLevel()

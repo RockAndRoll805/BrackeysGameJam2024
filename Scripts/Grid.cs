@@ -31,14 +31,14 @@ public partial class Grid : Node2D
 		if (newMouseCellCoordinates != mouseCellCoordinates)
 		{
 			mouseCellCoordinates = newMouseCellCoordinates;
-			if (GridController.SelectedUnit == null)
+			if (GridController.SelectedUnit is null)
 			{
 				MoveHighlightedCell();
 			}
 		}
 
 		// make selected unit follow the mouse
-		if(this.GetNodeOrNull<Sprite2D>("Sprite2D") != null)
+		if(this.GetNodeOrNull<Sprite2D>("Sprite2D") is not null)
 		{
 			GetNodeOrNull<Sprite2D>("Sprite2D").Position = ConvertCellLocToXY(GetMouseCellLocation());
 		}
@@ -49,7 +49,7 @@ public partial class Grid : Node2D
 		// clicking off of a unit to deselect
 		if (@event is InputEventMouseButton eventKey)
 			if (eventKey.Pressed && eventKey.ButtonIndex <= MouseButton.Right
-			&& GridController.SelectedUnit != null)
+			&& GridController.SelectedUnit is not null)
 			{
 				// remove unit from former position in grid
 				GridController.UnitGrid[GridController.SelectedUnit.Coordinates.X, GridController.SelectedUnit.Coordinates.Y] = null;

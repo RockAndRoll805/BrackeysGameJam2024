@@ -144,7 +144,7 @@ public partial class Unit : Node2D
 
 			GridController.CurrentLevel.AddChild(ghost);
 
-			if (GridController.SelectedUnit != null)
+			if (GridController.SelectedUnit is not null)
 				GridController.SelectedUnit.Modulate = new Color(1f,1f,1f, 1f);
 			this.Modulate = new Color(1f,1f,1f, 0.8f);
 			GridController.SelectedUnit = this;
