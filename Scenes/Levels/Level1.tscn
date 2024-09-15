@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b7w414cbauav" path="res://Scenes/Units/LineShooter.tscn" id="1_s5n33"]
 [ext_resource type="Script" path="res://Scripts/Grid.cs" id="1_y86lv"]
-[ext_resource type="Texture2D" uid="uid://b50nnghwgwpox" path="res://Sprites/tile.png" id="2_371re"]
+[ext_resource type="Texture2D" uid="uid://d0jt87m2mxsco" path="res://Sprites/tile.png" id="2_371re"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ap34g"]
 texture = ExtResource("2_371re")

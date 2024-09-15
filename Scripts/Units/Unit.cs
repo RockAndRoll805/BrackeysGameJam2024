@@ -27,7 +27,8 @@ public partial class Unit : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GetNode<Sprite2D>("Sprite2D").Rotate(Mathf.DegToRad(90 * (int)facing_direction));
+		// GetNode<Sprite2D>("Sprite2D").Rotate(Mathf.DegToRad(90 * (int)facing_direction));
+		GetNode<Sprite2D>("Sprite2D").Frame = FacingDirection;
 		
 		// Add signals to class
 		GetNode<Button>("Button").Pressed += SelectUnit;
@@ -124,12 +125,23 @@ public partial class Unit : Node2D
 		}
 		else
 		{
-			Sprite2D ghost = new Sprite2D();
-			ghost.Scale = this.GetNode<Sprite2D>("Sprite2D").Scale;
-			ghost.Texture = this.GetNode<Sprite2D>("Sprite2D").Texture;
-			ghost.Rotation = this.GetNode<Sprite2D>("Sprite2D").Rotation;
-			ghost.Position = this.Position;
-			ghost.Name = "Sprite2D";
+			// Sprite2D ghost = new Sprite2D();
+			// ghost.Scale = this.GetNode<Sprite2D>("Sprite2D").Scale;
+			// ghost.Texture = this.GetNode<Sprite2D>("Sprite2D").Texture;
+			// ghost.Rotation = this.GetNode<Sprite2D>("Sprite2D").Rotation;
+			// ghost.Position = this.Position;
+			// ghost.Name = "Sprite2D";
+			// ghost.Frame = this.FacingDirection;
+			Sprite2D ghost = new() {
+				Scale = this.GetNode<Sprite2D>("Sprite2D").Scale,
+				Texture = this.GetNode<Sprite2D>("Sprite2D").Texture,
+				Hframes = 4,
+				Rotation = GetNode<Sprite2D>("Sprite2D").Rotation,
+				Position = this.Position,
+				Name = "Sprite2D",
+				Frame = this.FacingDirection
+			};
+
 			GridController.CurrentLevel.AddChild(ghost);
 
 			if (GridController.SelectedUnit != null)
