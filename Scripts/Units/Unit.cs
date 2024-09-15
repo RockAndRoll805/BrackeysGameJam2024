@@ -116,11 +116,11 @@ public partial class Unit : Node2D
 
 	public void SelectUnit()
 	{
-		if (GridController.SelectedUnit == this)
+		if (GridController.SelectedUnit is not null)
 		{
 			GridController.CurrentLevel.GetNodeOrNull("Sprite2D")?.QueueFree();
 
-			this.Modulate = new Color(1f,1f,1f, 1f);
+			GridController.SelectedUnit.Modulate = new Color(1f,1f,1f, 1f);
 			GridController.SelectedUnit = null;
 		}
 		else
