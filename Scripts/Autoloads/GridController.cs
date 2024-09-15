@@ -20,18 +20,8 @@ public partial class GridController : Node
 		set
 		{
 			selectedUnit = value;
-			CurrentLevel.UpdateCursorHighlight();
+			if (value is not null)
+				CurrentLevel.UpdateCursorHighlight();
 		}
 	}
-
-	// public static void HighlightGrid(int[,] selection)
-	// {
-	// 	for (int y = 0; y < GridSize.X; y++)
-	// 	{
-	// 		string printer = "";
-	// 		for (int x = 0; x < GridSize.Y; x++)
-	// 			printer += selection[x, y] + " ";
-	// 		GD.Print(printer);
-	// 	}
-	// }
 }

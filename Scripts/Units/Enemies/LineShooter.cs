@@ -68,8 +68,8 @@ public partial class LineShooter : Unit
 		return selection;
 	}
 
-	public override void Attack()
-	{
+	// public override void Attack()
+	// {
 
-	}
+	// }
 }

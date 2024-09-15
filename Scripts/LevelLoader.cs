@@ -15,6 +15,9 @@ public partial class LevelLoader : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		GetNode<Button>("AttackButton").Pressed += DoAttack;
+		GetNode<Button>("ResetLevelButton").Pressed += ResetLevel;
+
 		LoadNextLevel();
 		GetTree().GetRoot().SizeChanged += ResizeWindow;
 		ResizeWindow();
@@ -22,11 +25,23 @@ public partial class LevelLoader : Node
 
 	public void DoAttack()
 	{
-		foreach(Node child in GetChildren())
+		foreach(Node child in GridController.CurrentLevel.GetChildren())
 		{
-			if (child is Unit unit)
+			if (child is not null && child is Unit unit)
+			{
 				unit.Attack();
+			}
+				
 		}
+	}
+
+	public void ResetLevel()
+	{
+		GetNode<Grid>("Level" + currentLevelCount).Free();
+		GridController.UnitGrid = null;
+		GridController.SelectedUnit = null;
+		GridController.CurrentLevel = null;
+		LoadCurrentLevel();
 	}
 
 	// currently this is support for 4k displays
@@ -38,27 +53,32 @@ public partial class LevelLoader : Node
 			camera.Zoom = new Vector2(viewportSize.X / 1920, viewportSize.Y / 1080);
 	}
 
+	private bool LoadCurrentLevel()
+	{
+		string levelScene = "res://Scenes/Levels/Level" + currentLevelCount + ".tscn";
+		if (!ResourceLoader.Exists(levelScene))
+			return false;
+		PackedScene nextLevel = GD.Load<PackedScene>(levelScene);
+		Grid nextLevelNode = (Grid)nextLevel.Instantiate();
+		GD.Print("did we make it here?");
+		GridController.CurrentLevel = nextLevelNode;
+		AddChild(nextLevelNode);
+		AlignGridAndPopulate();
+		GridController.CurrentLevel.HighlightAttacks();
+		return true;
+	}
+
 	private void LoadNextLevel()
 	{
 		Node currentLevel = GetNodeOrNull("Level" + currentLevelCount);
 		if (currentLevel != null)
 		{
-			RemoveChild(currentLevel);
+			currentLevel.QueueFree();
 		}
 
 		currentLevelCount++;
-		string levelScene = "res://Scenes/Levels/Level" + currentLevelCount + ".tscn";
 
-		if (ResourceLoader.Exists(levelScene))
-		{
-			PackedScene nextLevel = GD.Load<PackedScene>(levelScene);
-			Grid nextLevelNode = (Grid)nextLevel.Instantiate();
-			AddChild(nextLevelNode);
-			GridController.CurrentLevel = nextLevelNode;
-			AlignGridAndPopulate();
-			GridController.CurrentLevel.HighlightAttacks();
-		}
-		else
+		if (!LoadCurrentLevel())
 		{
 			// todo load win screen
 		}
@@ -69,6 +89,7 @@ public partial class LevelLoader : Node
 	{
 		GridController.UnitGrid = new Node[GridController.GridSize.X, GridController.GridSize.Y];
 		Node currentLevel = GetNode("Level" + currentLevelCount);
+		int counter = 1;
 		foreach(Node child in currentLevel.GetChildren())
 		{
 			if (child is Unit unit)
@@ -87,6 +108,17 @@ public partial class LevelLoader : Node
 				float gridY = ((newY - 32) / 64) + GridController.GridSize.Y / 2;
 				GridController.UnitGrid[(int)gridX, (int)gridY] = unit;
 				unit.Coordinates = ((int)gridX, (int)gridY);
+
+				RichTextLabel attackOrder = new RichTextLabel();
+				attackOrder.Size = new Vector2(64, 64);
+				attackOrder.PushColor(new Color(0, 1, 0, 1));
+				attackOrder.PushBold();
+				attackOrder.AddText(counter++ + "");
+				attackOrder.Position = new Vector2(-32, -32);
+				attackOrder.MouseFilter = Control.MouseFilterEnum.Ignore;
+				attackOrder.ZIndex = 1;
+				GD.Print(unit.Name);
+				unit.AddChild(attackOrder);
 			}
 		}
 	}
