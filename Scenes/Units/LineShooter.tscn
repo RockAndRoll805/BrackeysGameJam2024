@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://b7w414cbauav"]
 
-[ext_resource type="Script" path="res://Scripts/Units/LineShooter.cs" id="1_2er63"]
+[ext_resource type="Script" path="res://Scripts/Units/Enemies/LineShooter.cs" id="1_8fran"]
 [ext_resource type="Texture2D" uid="uid://p25flpwrwa23" path="res://icon.svg" id="2_7ul5c"]
 
 [node name="LineShooter" type="Node2D"]
-script = ExtResource("1_2er63")
+script = ExtResource("1_8fran")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)

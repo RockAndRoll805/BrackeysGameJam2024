@@ -26,4 +26,9 @@ tile_set = SubResource("TileSet_i6ihd")
 position = Vector2(-35, 90)
 
 [node name="Test2" parent="." instance=ExtResource("1_s5n33")]
-position = Vector2(32, -30)
+position = Vector2(96, -32)
+facing_direction = 2
+
+[node name="Test3" parent="." instance=ExtResource("1_s5n33")]
+position = Vector2(-33, -32)
+facing_direction = 1

@@ -52,10 +52,11 @@ public partial class LevelLoader : Node
 		if (ResourceLoader.Exists(levelScene))
 		{
 			PackedScene nextLevel = GD.Load<PackedScene>(levelScene);
-			Node nextLevelNode = nextLevel.Instantiate();
+			Grid nextLevelNode = (Grid)nextLevel.Instantiate();
 			AddChild(nextLevelNode);
-			GridController.CurrentLevel = (Grid)nextLevelNode;
+			GridController.CurrentLevel = nextLevelNode;
 			AlignGridAndPopulate();
+			GridController.CurrentLevel.HighlightAttacks();
 		}
 		else
 		{
@@ -70,23 +71,22 @@ public partial class LevelLoader : Node
 		Node currentLevel = GetNode("Level" + currentLevelCount);
 		foreach(Node child in currentLevel.GetChildren())
 		{
-			if (child is Unit)
+			if (child is Unit unit)
 			{
 				// Align Grid - I am too lazy to align sprites in the editor so this does it programmatically
-				Node2D childUnit = (Node2D)child;
-				float x = childUnit.Position.X;
-				float y = childUnit.Position.Y;
+				float x = unit.Position.X;
+				float y = unit.Position.Y;
 				float newX = Mathf.Ceil(x / 64) * 64 - 32;
 				float newY = Mathf.Ceil(y / 64) * 64 - 32;
-				childUnit.Position = new Vector2(newX, newY);
+				unit.Position = new Vector2(newX, newY);
 				
 				// Populate Grid
 				// take X Y coordinates and turn it into position in 2d list
 				// the grid in the editor is aligned with the center at 0,0 so add half grid size to not go negative
 				float gridX = ((newX - 32) / 64) + GridController.GridSize.X / 2;
 				float gridY = ((newY - 32) / 64) + GridController.GridSize.Y / 2;
-				GridController.UnitGrid[(int)gridX, (int)gridY] = childUnit;
-				((Unit)childUnit).Coordinates = ((int)gridX, (int)gridY);
+				GridController.UnitGrid[(int)gridX, (int)gridY] = unit;
+				unit.Coordinates = ((int)gridX, (int)gridY);
 			}
 		}
 	}

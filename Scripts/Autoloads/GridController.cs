@@ -20,7 +20,7 @@ public partial class GridController : Node
 		set
 		{
 			selectedUnit = value;
-			CurrentLevel.UpdateHighlight();
+			CurrentLevel.UpdateCursorHighlight();
 		}
 	}
 

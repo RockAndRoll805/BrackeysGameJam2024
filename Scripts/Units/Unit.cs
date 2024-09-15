@@ -32,23 +32,31 @@ public partial class Unit : Node2D
 		GetNode<Button>("Button").Pressed += SelectUnit;
 	}
 
-	public override void _Process(double delta)
-	{
-		// if(is_selected) {
-		// 	// do whatever if unit is selected
-
-		// 	// check to see if unit is still selected and update accordingly
-		// 	if(GridController.SelectedUnit.GetInstanceId != this.GetInstanceId)
-		// 	{
-		// 		is_selected = false; 
-		// 	}
-		// }
-
-	}
-
 	public void HighlightAttack()
 	{
-		GD.Print(GridController.GridSize.X);
+		int[,] attackRange = GetAttackRange();
+		for (int y = 0; y < GridController.GridSize.Y; y++)
+		{
+			for (int x = 0; x < GridController.GridSize.X; x++)
+			{
+				ColorRect rect = new ColorRect();
+				rect.MouseFilter = Control.MouseFilterEnum.Ignore;
+				rect.Size = new Vector2(64, 64);
+				rect.Position = new Vector2(64 * (x - 2), 64 * (y - 2));
+
+				switch(attackRange[x, y])
+				{
+					case(1):
+						rect.Color = new Color(1f, 0f, 0f, 0.2f);
+						GridController.CurrentLevel.AddChild(rect);
+						break;
+					case(2):
+						rect.SelfModulate = new Color(1f, 0f, 0f, 0.5f);
+						GridController.CurrentLevel.AddChild(rect);
+						break;
+				}
+			}
+		}
 	}
 
 	public virtual int[,] GetAttackRange()
@@ -64,20 +72,26 @@ public partial class Unit : Node2D
 
 	public void SelectUnit()
 	{
-		//GridController.SelectedUnit = GridController.SelectedUnit == this ? null : this;
 		if (GridController.SelectedUnit == this)
 		{
+			GridController.CurrentLevel.GetNodeOrNull("Sprite2D")?.QueueFree();
+
 			this.Modulate = new Color(1f,1f,1f, 1f);
 			GridController.SelectedUnit = null;
 		}
 		else
 		{
+			Sprite2D ghost = new Sprite2D();
+			ghost.Scale = this.GetNode<Sprite2D>("Sprite2D").Scale;
+			ghost.Texture = this.GetNode<Sprite2D>("Sprite2D").Texture;
+			ghost.Position = this.Position;
+			ghost.Name = "Sprite2D";
+			GridController.CurrentLevel.AddChild(ghost);
+
 			if (GridController.SelectedUnit != null)
 				GridController.SelectedUnit.Modulate = new Color(1f,1f,1f, 1f);
 			this.Modulate = new Color(1f,1f,1f, 0.8f);
 			GridController.SelectedUnit = this;
 		}
-		// GridController.HighlightGrid(GetAttackRange());
-		// is_selected = true;
 	}
 }
