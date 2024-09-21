@@ -6,34 +6,92 @@ namespace TurboITB;
 
 public partial class Unit : Node2D
 {
-	[Export]
-	public int facing_direction = 0; // the direction the unit is facing -- 0 North, 1 East, 2 South, 3 West
+	public string unit_name;
+
+    public StatusEffect[] status_arr;
+
+    // public Weapon weapon = null;
+
+	// leveled stats
+    protected int power = 0, defense = 0, resistance = 0, skill = 0, speed = 0, luck = 0;
+    protected int hp_base = 0, hp_current = 0, hp_mod_add = 0, hp_mod_mult = 1;
+
+    // unleveled stats modifiers
+    protected int accuracy_mod, evasion_mod = 0, crit_chance_mod = 0, crit_damage_mod = 0;
+
+    /// <summary>
+    /// Maximum health value after modifiers
+    /// </summary>
+    /// <value></value>
+    protected int hp_max
+    {
+        get
+        {
+            int ret = (hp_base + hp_mod_add) * hp_mod_mult;
+            return (ret <= 0) ? 1 : ret;
+        }
+    }
+
+    protected int evasion { get => evasion_mod + skill; }
+
+
+    /// <summary>
+    /// Set unit's hp to a value
+    /// </summary>
+    /// <param name="heatlh">New HP value</param>
+    public void SetHp(int heatlh)
+    {
+        hp_current = heatlh;
+    }
+
+    /// <summary>
+    /// Apply heal without accuracy check. Can not overheal
+    /// </summary>
+    /// <param name="amount">Health to be restored</param>
+    public void Heal(int amount)
+    {
+        hp_current += amount;
+        if (hp_base > hp_max) { hp_current = hp_max; }
+    }
+
+    /// <summary>
+    /// Apply damage without performing accuracy check
+    /// </summary>
+    /// <param name="amount">Damage to be inflicted</param>
+    public void Damage(int amount)
+    {
+        amount -= defense;
+        hp_current -= (amount > 0) ? amount : 0;
+        if (hp_current <= 0){ Death(); }
+    }
+
+    public int Attack(Unit[] unit_arr)
+    {
+        return 0;
+    }
+
+    public int HealAttack(Unit[] unit_arr)
+    {
+        return 0;
+    }
+
+    public virtual void Death()
+    {
+        
+    }
+
+
 	protected (int X, int Y) coordinates = (0, 0); // the position of the unit on the grid in terms of (X,Y) coordinates
-	protected bool is_selected = false;
-
-	// gameplay variables
-	[Export]
-	protected int min_range = 0; // the minimum range of the unit
-	[Export]
-	protected int max_range = 5; // the maximum range of the unit
-
-	// gameplay assets
-	
-
-	// GETTERS and SETTERS
 	public (int X, int Y) Coordinates { get => coordinates; set => coordinates = value; }
-	public int FacingDirection { get => facing_direction; set => facing_direction = value; } // 0 North, 1 East, 2 South, 3 West
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		// GetNode<Sprite2D>("Sprite2D").Rotate(Mathf.DegToRad(90 * (int)facing_direction));
-		GetNode<Sprite2D>("Sprite2D").Frame = FacingDirection;
-		
 		// Add signals to class
 		GetNode<Button>("Button").Pressed += SelectUnit;
 	}
 
+	// TODO: replace this with a better system or rewrite in grid is set to isometric
 	public void HighlightAttack()
 	{
 		int[,] attackRange = GetAttackRange();
@@ -67,53 +125,12 @@ public partial class Unit : Node2D
 		return null;
 	}
 
-	// HACK HACKHACK!!! It's midnight!!
-	public virtual async void Attack()
+	public virtual void Attack()
 	{
-		int[,] attackArr = GetAttackRange();
-		(int x, int y) pos = (-1,-1);
-
-		for (int y = 0; y < GridController.GridSize.Y; y++)
-			for (int x = 0; x < GridController.GridSize.X; x++)
-				if(attackArr[x, y] == 2)
-					pos = (x, y);
-		GD.Print(pos);
-		if (pos == (-1,-1))
-		{
-			switch(FacingDirection)
-			{
-				case(0): // north
-					pos = (coordinates.X, 0);
-					break;
-				case(1): // east
-					pos = (GridController.GridSize.Y - 1, coordinates.Y);
-					break;
-				case(2): // south
-					pos = (coordinates.X, GridController.GridSize.X - 1);
-					break;
-				case(3): // west
-					pos = (0, coordinates.Y);
-					break;
-			}
-		}
-		else
-		{
-			GridController.UnitGrid[pos.x, pos.y].Free();
-			GridController.UnitGrid[pos.x, pos.y] = null;
-		}
-
-		int diffX = pos.x - coordinates.X;
-		int diifY = pos.y - coordinates.Y;
-		Sprite2D sprite = new Sprite2D();
-		sprite.Name = "Bullet";
-		sprite.Texture = GD.Load<Texture2D>("res://Sprites/UI/highlight circle.png");
-		this.AddChild(sprite);
-		Tween tween = sprite.CreateTween();
-		tween.TweenProperty(sprite, "position", new Vector2(diffX * 64, diifY * 64), 0.5f);
-		tween.TweenCallback(Callable.From(sprite.QueueFree));
 
 	}
 
+	// TODO: replace this with a better system or rewrite in grid is set to isometric
 	public void SelectUnit()
 	{
 		if (GridController.SelectedUnit is not null)
@@ -125,13 +142,6 @@ public partial class Unit : Node2D
 		}
 		else
 		{
-			// Sprite2D ghost = new Sprite2D();
-			// ghost.Scale = this.GetNode<Sprite2D>("Sprite2D").Scale;
-			// ghost.Texture = this.GetNode<Sprite2D>("Sprite2D").Texture;
-			// ghost.Rotation = this.GetNode<Sprite2D>("Sprite2D").Rotation;
-			// ghost.Position = this.Position;
-			// ghost.Name = "Sprite2D";
-			// ghost.Frame = this.FacingDirection;
 			Sprite2D ghost = new() {
 				Scale = this.GetNode<Sprite2D>("Sprite2D").Scale,
 				Texture = this.GetNode<Sprite2D>("Sprite2D").Texture,
@@ -139,7 +149,7 @@ public partial class Unit : Node2D
 				Rotation = GetNode<Sprite2D>("Sprite2D").Rotation,
 				Position = this.Position,
 				Name = "Sprite2D",
-				Frame = this.FacingDirection
+				// Frame = this.FacingDirection
 			};
 
 			GridController.CurrentLevel.AddChild(ghost);

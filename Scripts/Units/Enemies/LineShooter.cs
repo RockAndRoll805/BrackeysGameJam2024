@@ -8,11 +8,12 @@ public partial class LineShooter : Unit
 	// line shooter shoots in a line that it is facing
 	// it's attack stops on the first unit hit
 
+
+	// TODO: remove or rewrite this enemy
 	public override int[,] GetAttackRange()
 	{
 		int[,] selection = new int[GridController.GridSize.X, GridController.GridSize.Y];
-		
-		// I am lazy so just going to do switch here
+		int FacingDirection = 0;
 		switch (FacingDirection)
 		{
 			case 0: // north
